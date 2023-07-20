@@ -14,14 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectsData:
   - ObjID: 1
-    ObjPath: 
+    ObjPath: Resources/Prefabs/Head
   - ObjID: 2
-    ObjPath: 
-  - ObjID: 3
-    ObjPath: 
-  - ObjID: 4
-    ObjPath: 
-  - ObjID: 5
-    ObjPath: 
-  - ObjID: 6
-    ObjPath: 
+    ObjPath: Resources/Prefabs/Body

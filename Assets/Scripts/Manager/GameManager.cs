@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public LevelManager levelSelected;
+    public TileMapManager tileMapManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,17 +19,17 @@ public class GameManager : MonoBehaviour
     }
     public void LoadLevel(int id = 0)
     {
-        levelSelected.levelID = id;
-        levelSelected.LoadLevel();
+        tileMapManager.LevelID = id;
+        tileMapManager.LoadMap();
     }
     public void NextLevel()
     {
-        levelSelected.levelID = levelSelected.levelID + 1;
-        levelSelected.LoadLevel();
+        tileMapManager.LevelID = tileMapManager.LevelID + 1;
+        tileMapManager.LoadMap();
     }
     IEnumerator BeginLevel()
     {
-        levelSelected.ClearLevel();
+        tileMapManager.ClearMap();
         yield return new WaitForSeconds(1f);
         LoadLevel();
     }

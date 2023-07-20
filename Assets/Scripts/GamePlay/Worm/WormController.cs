@@ -56,7 +56,6 @@ public class WormController : MonoBehaviour
         isReseting = false;
         distance = 1;
         DropDownParts.Add(gameObject);
-
     }
 
     // Update is called once per frame
@@ -177,10 +176,7 @@ public class WormController : MonoBehaviour
     }
     void Growth()
     {
-        GameObject firstbody = Instantiate(BodyPrefabs,DropDownParts.Last().transform.position, Quaternion.identity);
-        BodyParts.Add(firstbody);
-        DropDownParts.Add(firstbody);
-  
+        Instantiate(BodyPrefabs,DropDownParts.Last().transform.position, Quaternion.identity);
     }
     void BodyMoving()
     {
@@ -242,12 +238,15 @@ public class WormController : MonoBehaviour
         {
             Growth();
         }
-        if(collision.gameObject.tag == "Victory")
+        else if(collision.gameObject.tag == "Victory")
         {
             gameObject.GetComponent<WormController>().enabled = false;
             Time.timeScale = 0f;
         }
-        if(collision.gameObject.tag == "Spike")
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Spike")
         {
             Time.timeScale = 0f;
             Debug.Log("You Lose");

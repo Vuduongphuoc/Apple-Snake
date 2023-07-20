@@ -6,6 +6,6 @@ public class LevelFinishPoint : LevelObjects
 {
     public override int GetObjectID()
     {
-        return 1;
+        return 5;
     }
 }

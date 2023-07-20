@@ -18,6 +18,11 @@ public class WormBody : MonoBehaviour
     float speed;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        WormController.BodyParts.Add(gameObject);
+        WormController.DropDownParts.Add(gameObject);
+    }
     void Start()
     {
         speed = 5f;
