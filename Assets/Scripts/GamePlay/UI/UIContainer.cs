@@ -18,10 +18,6 @@ public class UIContainer : MonoBehaviour
     {
         
     }
-    public void LevelMenu()
-    {
-
-    }
     public void Music()
     {
 
@@ -29,9 +25,5 @@ public class UIContainer : MonoBehaviour
     public void Sound()
     {
 
-    }
-    public void ResetLevel()
-    {
-        gameManager.LoadLevel();
     }
 }

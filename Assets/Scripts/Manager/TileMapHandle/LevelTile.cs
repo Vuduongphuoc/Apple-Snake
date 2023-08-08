@@ -14,10 +14,10 @@ public enum TileType
 {
     //Ground
     Floor = 0,
-    Border = 1,
-    Apple = 3,
-    Spike = 4,
+    Border = 1000,
+    Apple = 3000,
+    Spike = 4000,
     //Unit
-    Worm = 1000,
+    Worm = 10000,
 
 }

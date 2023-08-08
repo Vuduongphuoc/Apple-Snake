@@ -5,16 +5,20 @@ using UnityEngine;
 public class ConfigFile : MonoBehaviour
 {
     public static ConfigFile Instance;
+    [Header("Factory Config")]
+    [SerializeField] private LevelObjFactory objFactory;
 
-    [SerializeField] private LevelObjFactory LevelObjFactoryConfig;
-
-    public LevelObjFactory levelFactory { get => LevelObjFactoryConfig; }
+    
+    public LevelObjFactory GameObjFactory { get => objFactory; }
 
     private void Awake()
     {
-       if(Instance == null)
-        {
-            Instance = this;
-        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        objFactory = Resources.Load("LevelFactory", typeof(ScriptableObject)) as LevelObjFactory;
+
     }
 }

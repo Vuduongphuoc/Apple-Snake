@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = " New Object Factory" , menuName = "Level Object Factory")]
+[CreateAssetMenu(fileName = "Map Object" , menuName = "New Object Factory")]
+
 public class LevelObjFactory : ScriptableObject
 {
     public List<ObjData> ObjectsData;
-    public Dictionary<int, string> ObjDic;
+    private  Dictionary<int, string> ObjDic;
 
     public string ReturnPath(int PathID)
     {
@@ -20,6 +21,7 @@ public class LevelObjFactory : ScriptableObject
                 ObjDic.Add(ObjectsData[i].ObjID, ObjectsData[i].ObjPath);
             }
         }
+        
         return ObjDic[PathID];
     }
 }
@@ -29,4 +31,5 @@ public class ObjData
 {
     public int ObjID;
     public string ObjPath;
+    
 }

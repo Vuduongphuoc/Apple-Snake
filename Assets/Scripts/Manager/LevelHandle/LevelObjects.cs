@@ -8,7 +8,7 @@ public abstract class LevelObjects : MonoBehaviour
     public virtual void SetData(LevelObjData objdata)
     {
 
-    } 
+    }   
     public virtual LevelObjData GetData()
     {
         LevelObjData levelobj = new LevelObjData();
@@ -16,5 +16,6 @@ public abstract class LevelObjects : MonoBehaviour
         levelobj.ObjPos = transform.position;
 
         return levelobj;
+        
     }
 }

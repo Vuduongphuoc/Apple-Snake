@@ -10,13 +10,14 @@ using UnityEngine.Tilemaps;
 public class TileMapManager : MonoBehaviour
 {
     public LevelObjFactory ObjFactory;
-    [SerializeField] private Tilemap _floorMap, _borderMap,_unitMap;
-    [SerializeField] LevelObjects[] Objects;
+    [SerializeField] private Tilemap _floorMap, _borderMap, _unitMap;
+    [SerializeField] private LevelObjects[] objects;
     public int LevelID;
+
 
     public void SaveMap()
     {
-        var newlevel = ScriptableObject.CreateInstance<TileMapScriptableObject>();
+        var newlevel = ScriptableObject.CreateInstance<LevelScriptableObject>();
 
         newlevel.levelIndex = LevelID;
         newlevel.name = $"Level_{LevelID}";
@@ -24,29 +25,15 @@ public class TileMapManager : MonoBehaviour
         newlevel.FloorTiles = GetTilesFromMap(_floorMap).ToList();
         newlevel.BorderTiles = GetTilesFromMap(_borderMap).ToList();
         newlevel.UnitTiles = GetTilesFromMap(_unitMap).ToList();
-        
-
-
-        Objects = FindObjectsOfType(typeof(LevelObjects)).Cast<LevelObjects>().ToArray();
-
-        for (int i = 0; i < Objects.Length; i++)
-        {
-            if (newlevel.ObjectTiles == null)
-            {
-                newlevel.ObjectTiles= new List<LevelObjData>();
-            }
-            newlevel.ObjectTiles.Add(Objects[i].GetData());
-        }
-        ScriptableUtility.SaveLevelFile(newlevel);
 
         //newlevel.GroundTiles;
         IEnumerable<LevelData> GetTilesFromMap(Tilemap map)
         {
-            foreach(var pos in map.cellBounds.allPositionsWithin)
+            foreach (var pos in map.cellBounds.allPositionsWithin)
             {
                 if (map.HasTile(pos))
                 {
-                   var levelTile = map.GetTile<LevelTile>(pos);
+                    var levelTile = map.GetTile<LevelTile>(pos);
                     yield return new LevelData()
                     {
                         position = pos,
@@ -55,11 +42,25 @@ public class TileMapManager : MonoBehaviour
                 }
             }
         }
+
+        objects = FindObjectsOfType(typeof(LevelObjects)).Cast<LevelObjects>().ToArray();
+
+        for (int i = 0; i < objects.Length; i++)
+        {
+            if (newlevel.ObjectPrefabs == null)
+            {
+                newlevel.ObjectPrefabs = new List<LevelObjData>();
+            }
+            newlevel.ObjectPrefabs.Add(objects[i].GetData());
+        }
+        ScriptableUtility.SaveLevelFile(newlevel);
     }
     public void LoadMap()
     {
-        var level = Resources.Load<TileMapScriptableObject>($"Levels/Level_{LevelID}");
-        if(level == null)
+        ResumeLevel();
+        var level = Resources.Load<LevelScriptableObject>("Levels/Level_" + LevelID);
+        //Debug.Log(LevelID);
+        if (level == null)
         {
             Debug.LogError($"Level_{LevelID} does not exist");
             return;
@@ -77,31 +78,33 @@ public class TileMapManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        //foreach (var saveTile in level.BorderTiles)
-        //{
-        //    switch (saveTile.Tile.type)
-        //    {
-        //        case TileType.Border:
-        //            SetTile(_borderMap, saveTile);
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException();
-        //    }
-        //}
-        //foreach (var saveTile in level.UnitTiles)
-        //{
-        //    switch (saveTile.Tile.type)
-        //    {
-        //        case TileType.Apple:
-        //            SetTile(_unitMap, saveTile);
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException();
-        //    }
-        //}
-        foreach (var obj in level.ObjectTiles)
+        foreach (var saveTile in level.BorderTiles)
         {
-            var levelObj = Resources.Load<LevelObjects>(ConfigFile.Instance.levelFactory.ReturnPath(obj.ObjID));
+            switch (saveTile.Tile.type)
+            {
+                case TileType.Border:
+                    SetTile(_borderMap, saveTile);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        foreach (var saveTile in level.UnitTiles)
+        {
+            switch (saveTile.Tile.type)
+            {
+                case TileType.Apple:
+                    SetTile(_unitMap, saveTile);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        foreach (var obj in level.ObjectPrefabs)
+        {
+
+            var levelObj = Resources.Load<LevelObjects>(ConfigFile.Instance.GameObjFactory.ReturnPath(obj.ObjID));
             var createObj = Instantiate<LevelObjects>(levelObj, obj.ObjPos, Quaternion.identity);
             createObj.transform.SetParent(this.transform);
             createObj.SetData(obj);
@@ -114,7 +117,7 @@ public class TileMapManager : MonoBehaviour
     public void ClearMap()
     {
         var maps = FindObjectsOfType<Tilemap>();
-        foreach(var tilemap in maps)
+        foreach (var tilemap in maps)
         {
             tilemap.ClearAllTiles();
         }
@@ -122,7 +125,13 @@ public class TileMapManager : MonoBehaviour
         foreach (LevelObjects i in clearObj)
         {
             i.gameObject.SetActive(false);
-       
+            if (i.gameObject.activeSelf)
+            {
+                Worm.Instance.BodyParts.Clear();
+                Worm.Instance.PositionHistory.Clear();
+                Worm.Instance.DropDownParts.Clear();
+                Destroy(i.gameObject);
+            }
         }
     }
     public void ResumeLevel()
@@ -135,7 +144,7 @@ public class TileMapManager : MonoBehaviour
     }
     public void BackMenu()
     {
-
+        ClearMap();
     }
 }
 
@@ -143,9 +152,9 @@ public class TileMapManager : MonoBehaviour
 
 public static class ScriptableUtility
 {
-    public static void SaveLevelFile(TileMapScriptableObject level)
+    public static void SaveLevelFile(ScriptableObject level)
     {
-        AssetDatabase.CreateAsset(level,$"Assets/Resources/Levels/{level.name}.asset");
+        AssetDatabase.CreateAsset(level,$"Assets/Resources/Levels/"+ level.name + ".asset");
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
@@ -153,22 +162,22 @@ public static class ScriptableUtility
 
 #endif
 
-public struct Levels
-{
-    public int levelIndex;
-    public List<LevelData> FloorTiles;
-    public List<LevelData> BorderTiles;
-    public List<LevelData> UnitTiles;
+//public struct Levels
+//{
+//    public int levelIndex;
+//    public List<LevelData> FloorTiles;
+//    public List<LevelData> BorderTiles;
+//    public List<LevelData> UnitTiles;
 
-    public string Serialize()
-    {
-        var builder = new StringBuilder();
-        builder.Append("g[");
-        foreach(var floorTile in FloorTiles)
-        {
-            builder.Append($"{(int)floorTile.Tile.type}({floorTile.position.x}.{floorTile.position.y})");
-        }
-        builder.Append(']');
-        return builder.ToString();
-    }
-}
+//    public string Serialize()
+//    {
+//        var builder = new StringBuilder();
+//        builder.Append("g[");
+//        foreach(var floorTile in FloorTiles)
+//        {
+//            builder.Append($"{(int)floorTile.Tile.type}({floorTile.position.x}.{floorTile.position.y})");
+//        }
+//        builder.Append(']');
+//        return builder.ToString();
+//    }
+//}
