@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class LevelSelector : MonoBehaviour
 {
-    public static int BtnLevelID;
-    public int BtnID;
-    public Text BtnText;
-
-    void Start()
-    {
-        BtnText.text = BtnID.ToString();
-    }
+    [SerializeField] private bool unlocked;
+    public Image unlockImage;
 }

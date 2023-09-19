@@ -1,156 +1,200 @@
-
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
 public class WormBody : MonoBehaviour
 {
+    [Header("----------------PREFABS & OBJECT----------------")]
     [SerializeField] private LayerMask layer;
-    public Sprite tailSprite;
+    public List<WormBody> list = new List<WormBody>();
+    public Sprite[] bodySprite;
+    [Header("----------------RayCast Object----------------")]
     public GameObject DownRay;
-    
-    BoxCollider2D box;
-    BoxCollider2D ManyBoxes;
-    float distanceFromTailToWall;
-    float speed;
+    public GameObject UpRay;
+    public GameObject LeftRay;
+    public GameObject RightRay;
 
+    [Header("----------------Body Flags----------------")]
+    bool ObjectSpotLeft; 
+    bool ObjectSpotRight; 
+    bool ObjectSpotUp; 
+    bool ObjectSpotDown;
+
+    public int a = 0;
+    public bool IsBodyOnGround;
+    BoxCollider2D ManyBoxes;
     // Start is called before the first frame update
-    void Start()
-    {
-        Worm.Instance.BodyParts.Add(gameObject);
-        Worm.Instance.DropDownParts.Add(gameObject);
-        speed = 10f;
-    }
 
     // Update is called once per frame
     void Update()
     {
-        DrawRayCastAtLastPart();
         DrawRayCastEveryPartOfBody();
     }
-    void DrawRayCastAtLastPart()
-    {
-        float distanceRuler = 0.1f;
-        Worm.Instance.lastPart = Worm.Instance.BodyParts.Last();
-        box = Worm.Instance.lastPart.GetComponent<BoxCollider2D>();
-        Worm.Instance.lastPart.GetComponent<SpriteRenderer>().sprite = tailSprite;
-        
-        RaycastHit2D hitdown = Physics2D.Raycast(box.bounds.center, Vector2.down, box.bounds.extents.y + distanceRuler, layer);
-        Debug.DrawRay(box.bounds.center, Vector2.down * (box.bounds.extents.y + distanceRuler), Color.white);
-        if (hitdown.collider != null)
-        {
-            
-            if (hitdown.collider.tag == "Wall" || hitdown.collider.tag == "Apple" || hitdown.collider.tag == "Rock")
-            {
-                Worm.Instance.isTailOnGround = true;
-            }
-        }
-        else
-        {
-            Worm.Instance.isTailOnGround = false;
-        }
+    //Draw Ray at every parts of body
 
-        RaycastHit2D distanceHitdown = Physics2D.Raycast(DownRay.transform.position, Vector2.down);
-        Debug.DrawRay(DownRay.transform.position, Vector2.down * distanceHitdown.distance, Color.red);
-        if (distanceHitdown.collider != null)
-        {
-            distanceFromTailToWall = distanceHitdown.distance;
-        }
-        else
-        {
-            distanceFromTailToWall = 0.1f;
-        }
-    }
-    // Draw Ray at every parts of body
-    
     void DrawRayCastEveryPartOfBody()
     {
-        for(int i = 0; i < Worm.Instance.BodyParts.Count - 1; i++)
+        float distanceRulers = 0.09f;
+        ManyBoxes = gameObject.GetComponent<BoxCollider2D>();
+        RaycastHit2D hitdowns = Physics2D.Raycast(ManyBoxes.bounds.center, Vector2.down, ManyBoxes.bounds.extents.y + distanceRulers, layer);
+        if (hitdowns.collider != null)
         {
-            float distanceRulers = 0.1f;
-            ManyBoxes = Worm.Instance.BodyParts[i].GetComponent<BoxCollider2D>();
-            RaycastHit2D hitdowns = Physics2D.Raycast(ManyBoxes.bounds.center, Vector2.down, ManyBoxes.bounds.extents.y + distanceRulers, layer);
-            Debug.DrawRay(ManyBoxes.bounds.center, Vector2.down * (box.bounds.extents.y + distanceRulers), Color.yellow);
-            if (hitdowns.collider != null)
-            {
-                
-                if (hitdowns.collider.tag == "Wall" || hitdowns.collider.tag == "Apple" || hitdowns.collider.tag == "Rock")
-                {
-                    Worm.Instance.isBodyOnGround = true;
-                }
+            if (hitdowns.collider.CompareTag("Wall") || hitdowns.collider.CompareTag("Apple") || hitdowns.collider.CompareTag("Rock"))
+            {   
+                IsBodyOnGround = true;
             }
             else
             {
-                Worm.Instance.isBodyOnGround = false;
-            }
-        }
-        CheckOnGround();
-    }
-    
-    void CheckOnGround()
-    {
-        if (Worm.Instance.isTailOnGround == false)
-        {
-            
-            if(Worm.Instance.isBodyOnGround == false)
-            {
-                
-                if(Worm.Instance.isHeadOnGround == false)
-                {
-
-                    Worm.Instance.isGround = false;
-                    if (Worm.Instance.isGround == false)
-                    {
-                        StartCoroutine(PositionAfterDrop());
-                    }
-                }
-                else
-                {
-                    Worm.Instance.isGround = true;
-                }
-            }
-            else
-            {
-                Worm.Instance.isGround = true;
+                IsBodyOnGround = false;
             }
         }
         else
         {
-            Worm.Instance.isGround = true;
+            IsBodyOnGround = false;
         }
-    }
-    void DropDown()
-    {
-        StartCoroutine(WaitBeforeDrop());
-        foreach (GameObject part in Worm.Instance.DropDownParts)
+        RaycastHit2D hitdown = Physics2D.Raycast(DownRay.transform.position, Vector2.down);   
+        RaycastHit2D hitleft = Physics2D.Raycast(LeftRay.transform.position, Vector2.left);
+        RaycastHit2D hitright = Physics2D.Raycast(RightRay.transform.position, Vector2.right);
+        RaycastHit2D hitup = Physics2D.Raycast(UpRay.transform.position, Vector2.up);
+        if (hitdown.collider != null && hitdown.distance < 0.1f)
         {
-            part.transform.position = new Vector3(part.transform.position.x, part.transform.position.y - distanceFromTailToWall * speed * Time.deltaTime);
-        }
-    }
-    
-    IEnumerator PositionAfterDrop()
-    {
-        DropDown();
-        yield return new WaitForSeconds(0.1f);
-        Worm.Instance.isDropping = true;
-        if (Worm.Instance.isDropping == true)
-        {
-            
-            Worm.Instance.PositionHistory.Clear();
-            foreach (GameObject bodies in Worm.Instance.DropDownParts)
+            if (hitdown.collider.tag == "Tail" || hitdown.collider.tag == "Head" || hitdown.collider.tag =="Body")
             {
-                Worm.Instance.PositionHistory.Add(bodies.transform.position);
+                ObjectSpotDown = true;
             }
-            Worm.Instance.isDropping = false;
+            else
+            {
+                
+                ObjectSpotDown = false;
+            }
+        }
+        else
+        {
+            ObjectSpotDown = false;
+        }
+        if (hitleft.collider != null && hitleft.distance < 0.1f)
+        {
+            if (hitleft.collider.tag == "Tail" || hitleft.collider.tag == "Head" || hitleft.collider.tag == "Body")
+            {
+                ObjectSpotLeft = true;
+            }
+            else
+            {
+                ObjectSpotLeft = false;
+            }
+        }
+        else
+        {
+            ObjectSpotLeft = false;
+        }
+        if (hitright.collider != null && hitright.distance < 0.1f)
+        {
+            if (hitright.collider.tag == "Tail" || hitright.collider.tag == "Head" || hitright.collider.tag == "Body")
+            {
+                ObjectSpotRight = true;
+            }
+            else 
+            {
+                ObjectSpotRight = false;
+            }
+        }
+        else
+        {
+           
+            ObjectSpotRight = false;
+        }
+        if (hitup.collider != null && hitup.distance < 0.1f)
+        {
+            if (hitup.collider.tag == "Tail" || hitup.collider.tag == "Head" || hitup.collider.tag == "Body")
+            {
+                ObjectSpotUp = true;
+            }
+            else
+            {
+                ObjectSpotUp = false;
+            }
+        }
+        else
+        {
+            ObjectSpotUp = false;
+        }
+        ChangeSprite();
+    }
+    void ChangeSprite()
+    {
+        if (ObjectSpotRight)
+        {
+           if (ObjectSpotLeft )
+           {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[6];
+           }
+           else if (ObjectSpotUp )
+           {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[4];          
+           }
+           else if (ObjectSpotDown)
+           {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[3];
+
+           }
+
+        }
+        else if (ObjectSpotLeft) 
+        {
+            if(ObjectSpotRight)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[6];
+            }
+            else if (ObjectSpotUp)
+            {                
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[5];  
+            }
+            else if (ObjectSpotDown)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[2];
+            }
+        }
+        else if (ObjectSpotUp)
+        {
+
+            if (ObjectSpotRight)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[5];
+
+            }
+            else if (ObjectSpotLeft)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[4];
+            }
+            if (ObjectSpotDown)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[7];
+
+            }
+        }
+        else if (ObjectSpotDown)
+        {
+            if (ObjectSpotRight)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[3];
+            }
+            else if (ObjectSpotLeft)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[2];
+
+            }
+            else if (ObjectSpotUp)
+            {
+                ManyBoxes.GetComponent<SpriteRenderer>().sprite = bodySprite[7];
+            }
+
+
         }
 
     }
-    IEnumerator WaitBeforeDrop()
-    {
-        yield return new WaitForSeconds(1f);
-    }
+
 }
 

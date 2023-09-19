@@ -1,86 +1,90 @@
-//using NaughtyAttributes;
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using System.Linq;
-//using UnityEditor;
-//using System;
-//using UnityEditor.VersionControl;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+using UnityEditor;
+using System;
+using TMPro;
+using UnityEngine.UI;
+public class LevelManager : MonoBehaviour
+{
+    public static LevelManager Instance;
+    public List<LevelScriptableObject> lvls = new List<LevelScriptableObject>();
+    public Transform btnPos;
+    public GameObject btnPrefab;
+    public int indexCurrentlvl;
 
-//public class LevelManager : MonoBehaviour
-//{
-//    public LevelObjFactory ObjFactory;
-//    [SerializeField] LevelObjects[] Objects;
-//    public int levelID;
-
-//    [Button]
-//    public void SaveLevel()
-//    {
-//        var newlevel = ScriptableObject.CreateInstance<Level>();
-//        newlevel.LevelID = levelID;
-//        newlevel.name = $"Level_{levelID}";
-
-//        Objects = FindObjectsOfType(typeof(LevelObjects)).Cast<LevelObjects>().ToArray();
-
-//        for (int i = 0; i < Objects.Length; i++)
-//        {
-//            if (newlevel.LevelObj == null)
-//            {
-//                newlevel.LevelObj = new List<LevelObjData>();
-//            }
-//            newlevel.LevelObj.Add(Objects[i].GetData());
-//        }
-//        ScriptableObjectUtility.SaveLevelFile(newlevel);
-//    }
-
-//    public void LoadLevel()
-//    {
-//        var loadlevel = Resources.Load<Level>("Levels/Level_" + levelID);
-//        if (loadlevel == null)
-//        {
-//            Debug.Log("Don't have any Levels");
-//        }
-
-//        foreach (var obj in loadlevel.LevelObj)
-//        {
-//            var levelObj = Resources.Load<LevelObjects>(ConfigFile.Instance.levelFactory.ReturnPath(obj.ObjID));
-//            var createObj = Instantiate<LevelObjects>(levelObj, obj.ObjPos, Quaternion.identity);
-//            createObj.transform.SetParent(this.transform);
-//            createObj.SetData(obj);
-//        }
-//    }
-//    public void ResumeLevel()
-//    {
-//        Time.timeScale = 1f;
-//    }
-//    public void PauseLevel()
-//    {
-//        Time.timeScale = 0f;
-//    }
-//    public void BackMenu()
-//    {
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    private void Reset()
+    {
+        lvls.Clear();
+        foreach(LevelScriptableObject data in Resources.LoadAll<LevelScriptableObject>("Levels"))
+        {
+            lvls.Add(data);
+        }
+        lvls.OrderBy(x => x.name);
+        btnPos = GameObject.FindGameObjectWithTag("LevelContainer").transform;
+        btnPrefab = Resources.Load("Prefabs/Buttons/Button") as GameObject;
+    }
+    private void Start()
+    {
+        GameManager.Instance.LoadData();
+        LoadButtonWhenStart();
         
-//    }
-//    public void ClearLevel()
-//    {
-//        var clearObj = FindObjectsOfType<LevelObjects>();
-//        foreach(LevelObjects i in clearObj)
-//        {
-//            i.gameObject.SetActive(false);
-//            if (!i.gameObject.activeSelf)
-//            {
-//                Destroy(i.gameObject);
-//            }
-//        }
-//    }
-//}
-//public static class ScriptableObjectUtility
-//{
-//    public static void SaveLevelFile(ScriptableObject level)
-//    {
-//        AssetDatabase.CreateAsset(level, $"Assets/Resources/Levels/{level.name}.asset");
-//        AssetDatabase.SaveAssets();
-//        AssetDatabase.Refresh();
-//    }
-//}
+    }
+    private void setIndexCurrentLevel(int index)
+    {
+        indexCurrentlvl = index;
+    }
+    public void LoadButtonWhenStart()
+    {
+        foreach (var lvl in lvls)
+        {
+            GameObject btnlvl = Instantiate(btnPrefab, btnPos);
+            btnlvl.GetComponent<ButtonLevel>().levelScriptableObject = lvl;
+            btnlvl.GetComponentInChildren<TextMeshProUGUI>().text = lvl.name;
+            btnlvl.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Instance.LoadLevel(lvl.levelIndex); });
+            btnlvl.GetComponent<Button>().onClick.AddListener(delegate { setIndexCurrentLevel(lvl.levelIndex); });
+
+            if (GameManager.Instance.CheckLevelIsUnlock(lvl))
+            {
+                btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().unLockImg;
+                btnlvl.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().lockImg;
+                btnlvl.GetComponent<Button>().interactable = false;
+            }
+        }
+    }
+    public void LoadButtonWhilePlay()
+    {
+        foreach(Transform tp in btnPos)
+        {
+
+            if (GameManager.Instance.CheckLevelIsUnlock(tp.GetComponent<ButtonLevel>().levelScriptableObject))
+            {
+                tp.GetComponent<Image>().sprite = tp.GetComponent<ButtonLevel>().unLockImg;
+                tp.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                tp.GetComponent<Image>().sprite = tp.GetComponent<ButtonLevel>().lockImg;
+                tp.GetComponent<Button>().interactable = false;
+            }
+        }
+    }
+    
+}
 

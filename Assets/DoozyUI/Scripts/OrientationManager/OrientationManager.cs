@@ -158,7 +158,7 @@ namespace DoozyUI
             }
 #else
             //LANDSCAPE
-            if (Screen.orientation == ScreenOrientation.Landscape ||
+            if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
                Screen.orientation == ScreenOrientation.LandscapeLeft ||
                Screen.orientation == ScreenOrientation.LandscapeRight)
             {

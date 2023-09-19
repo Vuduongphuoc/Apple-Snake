@@ -12,13 +12,13 @@ GameObject:
   - component: {fileID: 3135590063553721703}
   - component: {fileID: 3135590063553721702}
   - component: {fileID: 3135590063553721701}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Sub_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3135590063553721720
 RectTransform:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 3135590064317407488}
   - component: {fileID: 1221684527}
   - component: {fileID: 1221684526}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}

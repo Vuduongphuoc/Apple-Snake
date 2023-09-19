@@ -12,6 +12,13 @@ TagManager:
   - Bar
   - Win
   - Rock
+  - Audio
+  - Body
+  - Head
+  - Tail
+  - LevelContainer
+  - PortalA
+  - PortalB
   layers:
   - Default
   - TransparentFX

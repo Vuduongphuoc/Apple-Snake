@@ -5,17 +5,28 @@ using UnityEngine.UI;
 
 public class ButtonUp : MonoBehaviour
 {
-    public static ButtonUp instance;
-    public WormMovement movement;
     public Button btn;
-    private void Awake()
+    public bool isActive;
+    private void OnEnable()
     {
-        instance = this;
+        
+       isActive = true;
+    }
+    private void OnDisable()
+    {
+        btn.onClick.RemoveAllListeners();
     }
     void Start()
     {
-        movement = GameObject.FindGameObjectWithTag("Worm").GetComponent<WormMovement>();
         btn = GetComponent<Button>();
-        btn.onClick.AddListener(movement.Up);
+    }
+    private void Update()
+    {
+        if (isActive)
+        {
+           
+            btn.onClick.AddListener(WormMovement.Instance.Up);
+            isActive = false;
+        }
     }
 }

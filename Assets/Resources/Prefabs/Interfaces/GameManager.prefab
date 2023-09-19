@@ -55,6 +55,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8845304059139363303}
   - component: {fileID: 8845304059139363300}
+  - component: {fileID: 1263136420}
+  - component: {fileID: 844064183}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -91,3 +93,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileMapManager: {fileID: 0}
+  WinPanel: {fileID: 0}
+--- !u!114 &1263136420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8845304059139363301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e363610ce67ee94a886cd3bd949d2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Level1: {fileID: 0}
+  gameplay: {fileID: 0}
+  gameplayUIBtns: {fileID: 0}
+  playerController: {fileID: 0}
+--- !u!114 &844064183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8845304059139363301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489377046353b594886f2b869e05a4ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    lvlunlocked: []

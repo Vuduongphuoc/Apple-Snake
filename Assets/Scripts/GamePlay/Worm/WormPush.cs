@@ -24,16 +24,6 @@ public class WormPush : MonoBehaviour
     {
         Instance = this;
     }
-    private void Start()
-    {
-        //Wall = GameObject.FindGameObjectsWithTag("Wall");
-        //ObjToPush = GameObject.FindGameObjectsWithTag("Rock");
-    
-    }
-    private void Update()
-    {
-        
-    }
     //public bool Move(Vector2 direction)
     //{
     //    if (ObjBlocked(transform.position, direction))

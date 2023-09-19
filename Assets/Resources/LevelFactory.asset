@@ -27,3 +27,9 @@ MonoBehaviour:
     ObjPath: Prefabs/Objects/Rock
   - ObjID: 7
     ObjPath: Prefabs/Objects/Tail
+  - ObjID: 10
+    ObjPath: Prefabs/Objects/Pressureplate
+  - ObjID: 20
+    ObjPath: Prefabs/Objects/Portal A
+  - ObjID: 21
+    ObjPath: Prefabs/Objects/Portal B

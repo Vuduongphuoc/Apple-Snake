@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
@@ -13,14 +14,18 @@ public class TileMapManager : MonoBehaviour
     [SerializeField] private Tilemap _floorMap, _borderMap, _unitMap;
     [SerializeField] private LevelObjects[] objects;
     public int LevelID;
-
+    
+    /*
+    private string path = "";
+    private string presistentPath = "";
+    */
 
     public void SaveMap()
     {
         var newlevel = ScriptableObject.CreateInstance<LevelScriptableObject>();
 
         newlevel.levelIndex = LevelID;
-        newlevel.name = $"Level_{LevelID}";
+        newlevel.name = $"Level {LevelID}";
 
         newlevel.FloorTiles = GetTilesFromMap(_floorMap).ToList();
         newlevel.BorderTiles = GetTilesFromMap(_borderMap).ToList();
@@ -53,16 +58,16 @@ public class TileMapManager : MonoBehaviour
             }
             newlevel.ObjectPrefabs.Add(objects[i].GetData());
         }
-        ScriptableUtility.SaveLevelFile(newlevel);
+        //ScriptableUtility.SaveLevelFile(newlevel);
     }
     public void LoadMap()
     {
         ResumeLevel();
-        var level = Resources.Load<LevelScriptableObject>("Levels/Level_" + LevelID);
+        var level = Resources.Load<LevelScriptableObject>("Levels/Level " + LevelID);
         //Debug.Log(LevelID);
         if (level == null)
         {
-            Debug.LogError($"Level_{LevelID} does not exist");
+            Debug.LogError($"Level {LevelID} does not exist");
             return;
         }
         ClearMap();
@@ -125,15 +130,51 @@ public class TileMapManager : MonoBehaviour
         foreach (LevelObjects i in clearObj)
         {
             i.gameObject.SetActive(false);
+            Destroy(i.gameObject);
             if (i.gameObject.activeSelf)
             {
+                Destroy(i.gameObject);
                 Worm.Instance.BodyParts.Clear();
                 Worm.Instance.PositionHistory.Clear();
                 Worm.Instance.DropDownParts.Clear();
-                Destroy(i.gameObject);
             }
         }
     }
+    /*
+    //JSON DATA SAVING    
+    //public void setPaths()
+    //{
+    //    path = Application.dataPath + Path.AltDirectorySeparatorChar + "SaveData.json";
+    //    presistentPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "SaveData.json";
+    //}
+    //public void SaveData()
+    //{
+    //    SaveLevelCompleted savelevel = new SaveLevelCompleted
+    //    {
+    //        levelName = $"Level_{LevelID}",
+    //        levelID = LevelID,
+
+    //    };
+    //    string savePath = path;
+    //    Debug.Log("Save data at: " + savePath);
+
+    //    string json = JsonUtility.ToJson(savelevel);
+    //    Debug.Log(json);
+
+    //    using StreamWriter writer = new StreamWriter(savePath);
+    //    writer.Write(json);
+    //}
+    //public void LoadData()
+    //{
+    //    using StreamReader reader = new StreamReader(path);
+    //    string json = reader.ReadToEnd();
+
+    //    SaveLevelCompleted data = JsonUtility.FromJson<SaveLevelCompleted>(json);
+    //    Debug.Log(data.ToString());
+    //}
+    //END HERE
+    */
+
     public void ResumeLevel()
     {
         Time.timeScale = 1f;
@@ -148,8 +189,8 @@ public class TileMapManager : MonoBehaviour
     }
 }
 
-#if UNITY_EDITOR
 
+#if UNITY_EDITOR
 public static class ScriptableUtility
 {
     public static void SaveLevelFile(ScriptableObject level)
@@ -159,7 +200,13 @@ public static class ScriptableUtility
         AssetDatabase.Refresh();
     }
 }
-
+public class SaveLevelCompleted
+{
+    public string levelName;
+    public int levelID;
+    public int score;
+    public int apples;
+}
 #endif
 
 //public struct Levels

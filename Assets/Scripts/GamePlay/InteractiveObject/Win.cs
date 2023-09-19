@@ -1,33 +1,41 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public class Win : MonoBehaviour
 {
 
-    public GameObject Mask;
+    //public Animation anim;
+
     // Start is called before the first frame update
-    private void OnEnable()
-    {
-        Mask.SetActive(false);
-    }
+
     // Update is called once per frame
-    void Update()
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if(collision.gameObject.TryGetComponent(out Worm hot))
+        if (collision.gameObject.TryGetComponent(out Worm hot))
         {
-            Debug.Log("You Win");
+            AudioManager.instance.PlaySFX(AudioManager.instance.win);
+            StartCoroutine(GameManager.Instance.Win());
             Worm.Instance.isWin = true;
-            Mask.SetActive(true);
+            if (Vector2.Distance(WormTail.Instance.gameObject.transform.position, transform.position) > 0.01f)
+            {
+                MoveToPortal();
+
+            }
         }
     }
-    //IEnumerator WinPopup()
-    //{
-    //    Time.timeScale = 0f;
-    //    yield return new WaitForSeconds(2f);
-    //    WinPanel.SetActive(true);
-    //}
+
+    void MoveToPortal()
+    {
+
+        Worm.Instance.transform.position = Vector2.Lerp(Worm.Instance.transform.position, transform.position, 1f * Time.deltaTime);
+        foreach (var p in Worm.Instance.DropDownParts)
+        {
+
+            p.GetComponent<SpriteRenderer>().enabled = false;
+            p.GetComponent<BoxCollider2D>().enabled = false;
+        
+        }
+    }
 }

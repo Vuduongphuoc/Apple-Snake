@@ -19,10 +19,4 @@ public class RandomBackGround : MonoBehaviour
         x = Random.Range(0, sprs.Length);
         BGs.sprite = sprs[x];
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

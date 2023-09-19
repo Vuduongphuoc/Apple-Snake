@@ -1,156 +1,178 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+
 
 public class WormMovement : MonoBehaviour
 {
-    private Worm worm;
-    private SpriteRenderer wormSprite;
-    private GameObject win;
+    public static WormMovement Instance;
+    public Sprite[] Spr;
+    
+    [Header("-------------BUTTON DIRECTION CHECK-----------------")]
+    public bool isMoving;
+    public Vector2 WinDirection;
+
+    bool isCoolDown;
+    Vector2 startPos;
+    Vector2 endPos;
     float speed;
+    float moveDuration = 0.1f;
+    float gridSize = 1f;
+
     // Update is called once per frame
-    void OnEnable()
+    private void Awake()
     {
-        speed = 3f;
-        worm = GetComponent<Worm>();
-        win = GameObject.FindGameObjectWithTag("Win");
-        wormSprite = worm.GetComponent<SpriteRenderer>();
+        Instance = this;
     }
-    private void Start()
+
+    void Start()
     {
-        
+        speed = 5f;
+        isCoolDown = false;
     }
-    void Update()
+    private void FixedUpdate()
     {
-        WormMove();
-        if (worm.isWin)
+        if (!isMoving)
         {
-            WormWin();
+            CheckBody();
+            CheckOnGround();
         }
     }
-    void WormMove()
+    public IEnumerator WormMove(Vector2 direction)
     {
-        if (worm.isMoving)
+        isMoving = true;
+        AudioManager.instance.PlaySFX(AudioManager.instance.move);
+        startPos = transform.position;
+        endPos = startPos +(direction * gridSize);
+        float elappedTime = 0;
+        while(elappedTime < moveDuration)
         {
-            if (worm.isLeft && worm.canMoveLeft)
-            {
-                worm.transform.Translate(Vector2.left);
-               
-                
-            }
-            if (worm.isRight && worm.canMoveRight)
-            {
-                
-                worm.transform.Translate(Vector2.right );
-
-            }
-
-            if (worm.isUp && worm.canMoveUp)
-            {
-                
-                worm.transform.Translate(Vector2.up );
-
-            }
-
-            if (worm.isDown && worm.canMoveDown)
-            {
-               
-                worm.transform.Translate(Vector2.down );
-
-            }
-            worm.PositionHistory.Insert(0, transform.position);
-            worm.BodyMoving();
+            elappedTime += Time.deltaTime;
+            float percent = elappedTime / moveDuration;
+            transform.position = Vector2.Lerp(startPos,endPos,percent);
+            BodyMoving();
+            yield return new WaitForEndOfFrame();
         }
-       
+        transform.position = endPos;
+        Worm.Instance.PositionHistory.Insert(0, transform.position);
+        yield return new WaitForSeconds(0.1f);
+        isMoving = false;
     }
-    void WormWin()
+    public void BodyMoving()
     {
-        worm.transform.Translate(Vector2.Lerp(worm.transform.position, win.transform.position, speed));
-    }
-    //void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    var direction = (worm.transform.position - rock.transform.position).normalized;
-    //    playerrb.AddForce(direction * force, ForceMode2D.Impulse);
-    //}
-    //public bool Move(Vector2 direction)
-    //{
-    //    if (Mathf.Abs(direction.x) == 0)
-    //    {
-    //        direction.x = 0;
-    //    }
-    //    else
-    //    {
-    //        direction.y = 0;
-    //    }
-    //    direction.Normalize();
-    //}
-    //    if (Blocked(transform.position, direction))
-    //    {
-    //        return false;
-    //    }
-    //    else
-    //    {
-    //        transform.Translate(direction);
-    //        return true;
-    //    }
-    //}
+        int index = 0;
 
-    //public bool Blocked(Vector3 pos,Vector2 direction)
-    //{
-    //    Vector2 newpos = new Vector2(pos.x, pos.y) + direction;
-    //    foreach (var db in Wall)
-    //    {
-    //        if(db.transform.position.x == newpos.x && db.transform.position.y == newpos.y)
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    foreach(var rock in ObjToPush)
-    //    {
-    //        if(rock.transform.position.x == newpos.x && rock.transform.position.y == newpos.y)
-    //        {
-    //            WormPush objpush = rock.GetComponent<WormPush>();
-    //            if(objpush&& objpush.Move(direction))
-    //            {
-    //                return false;
-    //            }
-    //            else
-    //            {
-    //                return true;
-    //            }
-    //        }
-    //    }
-    //    return false;
-    //}
+        foreach (var body in Worm.Instance.BodyParts)
+        {
+            Vector2 point = Worm.Instance.PositionHistory[Mathf.Min(index * Worm.Instance.distance, Worm.Instance.PositionHistory.Count - 1)];
+            body.transform.position = Vector2.Lerp(body.transform.position, point, 30f * Time.deltaTime);
+            index++;
+        }
+    }
+    void CheckBody()
+    {
+        Worm.Instance.isBodyOnGround = Worm.Instance.bodylist.Any(c=> c.GetComponent<WormBody>().IsBodyOnGround == true);
+    }
+    void DropDown()
+    {
+        foreach (var part in Worm.Instance.DropDownParts)
+        {
+            part.transform.position = new Vector2(part.transform.position.x, part.transform.position.y - WormTail.Instance.distanceFromTailToWall * speed * Time.deltaTime);
+        }
+    }
+    void DropDownAndPositionAfterDrop()
+    {
+        int i =0;
+        if (Worm.Instance.isWin)
+        {
+            this.enabled = false;
+        }
+        else
+        {
+            if (!Worm.Instance.isGround)
+            {
+                DropDown();
+            }
+            Worm.Instance.PositionHistory.Clear();
+            for(i = 0; i < Worm.Instance.DropDownParts.Count;)
+            {
+                Worm.Instance.PositionHistory.Add(Worm.Instance.DropDownParts[i].transform.position);
+                i++;
+            }
+        }
+    }
+    public void TurnOffMovement()
+    {
+        this.enabled = false;
+    }
+    public void CheckOnGround()
+    {
+        if (!Worm.Instance.isTailOnGround)
+        {
+            if (!Worm.Instance.isHeadOnGround)
+            {
+                if(!Worm.Instance.isBodyOnGround)
+                {
+                    Worm.Instance.isGround = false;
+                    DropDownAndPositionAfterDrop();
+                }
+                else { Worm.Instance.isGround = true; }
+            }
+            else { Worm.Instance.isGround = true; }
+        }
+        else { Worm.Instance.isGround = true; }
+    }
     public void Left()
     {
-        worm.isMoving = true;
-        worm.isLeft = true;
-        WormMove();
+        if (Worm.Instance.canMoveLeft && !isCoolDown)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = Spr[1];
+            StartCoroutine(WormMove(Vector2.left));
+            WinDirection = Vector2.left;
+            StartCoroutine(CoolDown());
+        }
     }
     public void Right()
     {
-        worm.isMoving = true;
-        worm.isRight = true;
-        WormMove();
-
+        if (Worm.Instance.canMoveRight && !isCoolDown)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = Spr[2];
+            StartCoroutine(WormMove(Vector2.right));
+            WinDirection = Vector2.right;
+            StartCoroutine(CoolDown());
+        }
     }
     public void Up()
     {
-        worm.isMoving = true;
-        worm.isUp = true;
-        WormMove();
-
+        if (Worm.Instance.canMoveUp && !isCoolDown)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = Spr[3];
+            StartCoroutine(WormMove(Vector2.up));
+            WinDirection = Vector2.up;
+            StartCoroutine(CoolDown());
+        }
     }
     public void Down()
     {
-        worm.isMoving = true;
-        worm.isDown = true;
-        WormMove();
-
+        if (Worm.Instance.canMoveDown && !isCoolDown)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = Spr[0];
+            StartCoroutine(WormMove(Vector2.down));
+            WinDirection = Vector2.down;
+            StartCoroutine(CoolDown());
+        }
     }
+
+    IEnumerator CoolDown()
+    {
+        isCoolDown = true;
+        yield return new WaitForSeconds(0.3f);
+        isCoolDown = false;
+    }
+    
 
 }

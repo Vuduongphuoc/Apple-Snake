@@ -48,5 +48,12 @@ MonoBehaviour:
   _floorMap: {fileID: 0}
   _borderMap: {fileID: 0}
   _unitMap: {fileID: 0}
-  objects: []
-  LevelID: 1
+  objects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  LevelID: 14

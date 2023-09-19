@@ -5,24 +5,32 @@ using UnityEngine.UI;
 
 public class ButtonLeft : MonoBehaviour
 {
-    public static ButtonLeft instance;
-    public WormMovement movement;
+
     public Button btn;
+    public bool isActive;
     // Start is called before the first frame update
-    private void Awake()
+    private void OnEnable()
     {
-        instance = this;
+       isActive = true;
+    }
+    private void OnDisable()
+    {
+        btn.onClick.RemoveAllListeners();
     }
     void Start()
     {
-        movement = GameObject.FindGameObjectWithTag("Worm").GetComponent<WormMovement>();
+        
         btn = GetComponent<Button>();
-        btn.onClick.AddListener(movement.Left);
+       
     }
-
     // Update is called once per frame
     void Update()
     {
-        
+        if (isActive)
+        {
+
+            btn.onClick.AddListener(WormMovement.Instance.Left);
+            isActive = false;
+        }
     }
 }

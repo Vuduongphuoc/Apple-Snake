@@ -56,9 +56,15 @@ MonoBehaviour:
     - categoryName: Uncategorized
       itemNames:
       - ~Element Name~
+      - ChallengeLvlMenu
       - GamePlay
       - Level
+      - Level 1
+      - Level 2
       - Menu
+      - SettingPanel
+      - SkinScene
+      - Win
       isExpanded:
         m_Target: 0
         speed: 2

@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Worm Skins Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 512
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 65
+      m_TextureCompression: 1
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 7870a7c7cac031649a8322a23176f430, type: 3}
+    - {fileID: 102900000, guid: fdfa9920fc4ea4543a421c3c5529d195, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: c4a5a7b0cb824b948b8ec4d9d8118a96, type: 3}
+  - {fileID: 21300000, guid: 1ed9b3320dc97f146b8cc7d6b6005b24, type: 3}
+  - {fileID: 21300000, guid: ef8aa692332dc7a4aa89f327b1ed2217, type: 3}
+  - {fileID: 21300000, guid: e90c24b2b88d41244bdf1255bb3e4450, type: 3}
+  - {fileID: 21300000, guid: 0797a683d6ff131479bcaa531c6ce323, type: 3}
+  - {fileID: 21300000, guid: eb65fa36e75f93c48854a6dca4ec5639, type: 3}
+  - {fileID: 21300000, guid: 8152fb66232f73941b600076a4e105ad, type: 3}
+  - {fileID: 21300000, guid: f173b518e52b13f4a8d02fc49ac9e20a, type: 3}
+  - {fileID: 21300000, guid: 58fc9688bf3a70c4f86e1cb0cbd7c691, type: 3}
+  - {fileID: 21300000, guid: c28fa5893e49d1948984c0e2d782edec, type: 3}
+  - {fileID: 21300000, guid: 3fa910c904907294c9712a7fdcbe9b8f, type: 3}
+  - {fileID: 21300000, guid: 32fe09d9e4fd28542a743507ee70ecf2, type: 3}
+  - {fileID: 21300000, guid: a65ea26bd72e1414894dc79ff765a196, type: 3}
+  - {fileID: 21300000, guid: a11211cbbcdba9141a9041f92e163d99, type: 3}
+  - {fileID: 21300000, guid: 89b9dfdc50485414b85e60e65cdfbcce, type: 3}
+  - {fileID: 21300000, guid: 82e4ab7d23c91a241aa81da5ae1d6970, type: 3}
+  - {fileID: 452924934, guid: 2942a54e91819a249b98de0e88a7f8eb, type: 3}
+  - {fileID: -894265098, guid: 2942a54e91819a249b98de0e88a7f8eb, type: 3}
+  - {fileID: 1273009985, guid: 2942a54e91819a249b98de0e88a7f8eb, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Corner Body Down Right
+  - Corner Body Upper Left
+  - Head Left
+  - Tail Down
+  - Body Facing Down
+  - Head up
+  - Body Facing Left
+  - Tail Facing Right
+  - Tail Facing Left
+  - Corner Body Upper Right
+  - Corner Body Down Left
+  - Head Down
+  - Body Facing Up
+  - Head Right
+  - Body Facing Right
+  - Tail Up
+  - ORIGIN_0
+  - ORIGIN_1
+  - ORIGIN_2
+  m_RenderDataMap: {}
+  m_Tag: Worm Skins Atlas
+  m_IsVariant: 0
