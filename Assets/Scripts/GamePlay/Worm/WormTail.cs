@@ -37,9 +37,10 @@ public class WormTail : MonoBehaviour
     }
     public void DrawRayCastAtLastPart()
     {
-        float distanceRuler = 0.09f;
+        float distanceRuler = 0.1f;
         box = gameObject.GetComponent<BoxCollider2D>();
         RaycastHit2D hitdowns = Physics2D.Raycast(box.bounds.center, Vector2.down, box.bounds.extents.y + distanceRuler, layer);
+        
         if (hitdowns.collider != null)
         {
             if (hitdowns.collider.CompareTag("Wall") || hitdowns.collider.CompareTag("Apple") || hitdowns.collider.CompareTag("Rock"))
@@ -57,7 +58,7 @@ public class WormTail : MonoBehaviour
         }
 
         RaycastHit2D distanceHitdown = Physics2D.Raycast(DownRay.transform.position, Vector2.down);
-        if (distanceHitdown.collider != null && !distanceHitdown.collider.CompareTag("Body") && !distanceHitdown.collider.CompareTag("Head"))
+        if (distanceHitdown.collider != null && !distanceHitdown.collider.CompareTag("Body") && !distanceHitdown.collider.CompareTag("Head") && !distanceHitdown.collider.CompareTag("Spike"))
         {
             distanceFromTailToWall = distanceHitdown.distance;
         }
@@ -67,7 +68,7 @@ public class WormTail : MonoBehaviour
         }
 
         RaycastHit2D hitdown = Physics2D.Raycast(DownRay.transform.position, Vector2.down);
-        if (hitdown.collider != null)
+        if (hitdown.collider != null && hitdown.distance < 0.1f)
         {
             if (hitdown.collider.tag == "Body")
             {

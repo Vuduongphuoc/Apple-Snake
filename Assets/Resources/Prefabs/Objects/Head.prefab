@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 8694886952440945059}
   - component: {fileID: -3097630521016363397}
   - component: {fileID: -7042701671424069038}
-  - component: {fileID: 6030247315929556149}
+  - component: {fileID: 4510737871255757707}
   m_Layer: 7
   m_Name: Head
   m_TagString: Head
@@ -210,7 +210,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.95, y: 0.95}
   m_EdgeRadius: 0
 --- !u!114 &8694886952440945059
 MonoBehaviour:
@@ -231,9 +231,6 @@ MonoBehaviour:
   BodyPrefabs: {fileID: 4297420104747539692, guid: 96ef3439b707a1e4680283f837bd6407, type: 3}
   TailPrefabs: {fileID: 4297420104747539692, guid: 21a56d64001716c4da145c273194f766, type: 3}
   headbox: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 128
   BodyParts: []
   DropDownParts: []
   PositionHistory: []
@@ -247,7 +244,6 @@ MonoBehaviour:
   canMoveUp: 0
   canMoveDown: 0
   isWin: 0
-  isLose: 0
   distance: 0
 --- !u!114 &-3097630521016363397
 MonoBehaviour:
@@ -280,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a56da7aff4befc94187a615c3146eace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &6030247315929556149
+--- !u!50 &4510737871255757707
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

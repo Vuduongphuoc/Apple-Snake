@@ -58,7 +58,7 @@ public class TileMapManager : MonoBehaviour
             }
             newlevel.ObjectPrefabs.Add(objects[i].GetData());
         }
-        //ScriptableUtility.SaveLevelFile(newlevel);
+        ScriptableUtility.SaveLevelFile(newlevel);
     }
     public void LoadMap()
     {
@@ -127,13 +127,15 @@ public class TileMapManager : MonoBehaviour
             tilemap.ClearAllTiles();
         }
         var clearObj = FindObjectsOfType<LevelObjects>();
+        
         foreach (LevelObjects i in clearObj)
         {
-            i.gameObject.SetActive(false);
-            Destroy(i.gameObject);
+            
+           Destroy(i.gameObject);
             if (i.gameObject.activeSelf)
             {
                 Destroy(i.gameObject);
+                
                 Worm.Instance.BodyParts.Clear();
                 Worm.Instance.PositionHistory.Clear();
                 Worm.Instance.DropDownParts.Clear();

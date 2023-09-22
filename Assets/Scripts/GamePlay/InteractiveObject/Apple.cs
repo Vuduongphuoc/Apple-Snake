@@ -8,7 +8,7 @@ public class Apple : MonoBehaviour
     {
         if (collision.gameObject.tag == "Head")
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

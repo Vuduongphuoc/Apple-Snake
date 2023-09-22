@@ -135,9 +135,9 @@ GameObject:
   - component: {fileID: 1999963265257693751}
   - component: {fileID: 8250952263200119262}
   - component: {fileID: 4561509477099408377}
-  - component: {fileID: -7680578868970723667}
   - component: {fileID: -6424250525047306560}
   - component: {fileID: 8354456783962818540}
+  - component: {fileID: 6474500314001039257}
   m_Layer: 7
   m_Name: Tail
   m_TagString: Tail
@@ -240,29 +240,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.95}
   m_EdgeRadius: 0
---- !u!50 &-7680578868970723667
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4297420104747539692}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &-6424250525047306560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,3 +280,24 @@ MonoBehaviour:
   LeftRay: {fileID: 966442541}
   distanceFromTailToWall: 0
   box: {fileID: 0}
+--- !u!50 &6474500314001039257
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4297420104747539692}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4

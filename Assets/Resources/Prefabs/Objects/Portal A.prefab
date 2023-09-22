@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 9153565919207406753}
   - component: {fileID: 9153565919207406758}
   - component: {fileID: 9153565919207406755}
-  - component: {fileID: 9153565919207406752}
   - component: {fileID: 7277481744913511209}
   m_Layer: 0
   m_Name: Portal A
@@ -118,27 +117,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.009586574, y: 0.000001758363}
   m_Size: {x: 0.8530128, y: 0.72586673}
   m_Direction: 1
---- !u!50 &9153565919207406752
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9153565919207406756}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &7277481744913511209
 MonoBehaviour:
   m_ObjectHideFlags: 0

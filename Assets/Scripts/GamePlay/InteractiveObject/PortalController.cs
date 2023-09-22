@@ -7,7 +7,7 @@ public class PortalController : MonoBehaviour
     public Transform destination;
     public bool isProtalA;
     private float distance = 0.2f;
-
+    private float coolDown;
     private void Start()
     {
         if (!isProtalA)
@@ -24,9 +24,17 @@ public class PortalController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        float time = 0f;
         if(Vector2.Distance(transform.position, collision.transform.position) > distance && !collision.CompareTag("Wall") )
         {
-           collision.transform.position = new Vector2(destination.position.x - 0.000001f, destination.position.y);
-        }   
+            while(time < 1f)
+            {
+                destination.GetComponent<BoxCollider2D>().enabled = false;
+                collision.transform.position = new Vector2(destination.position.x + 0.5f, destination.position.y);
+            }
+            time = time * Time.deltaTime;
+            
+            destination.GetComponent<BoxCollider2D>().enabled = true;
+        }
     }
 }

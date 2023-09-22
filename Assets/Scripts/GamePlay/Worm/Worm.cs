@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
 
 
@@ -18,7 +19,6 @@ public class Worm: MonoBehaviour
     public GameObject BodyPrefabs;
     public GameObject TailPrefabs;
     public BoxCollider2D headbox;
-    [SerializeField] private LayerMask layer;
 
     [Header("-----------------POSITION------------------")]
     public List<GameObject> BodyParts = new List<GameObject>();
@@ -41,8 +41,8 @@ public class Worm: MonoBehaviour
 
     [Header("-----------WIN OR LOSE CONDICTION-------------")]
     public bool isWin;
-    public bool isLose;
 
+    private Rigidbody2D rb;
     public int distance;
 
     private void Awake()
@@ -53,11 +53,13 @@ public class Worm: MonoBehaviour
     private void OnEnable()
     {
         PositionHistory.Insert(0, transform.position);
+       
     }
     void Start()
     {
         distance = 1;
         isHeadOnGround = false;
+        rb = GetComponent<Rigidbody2D>();
         GrowthFirstBody();
         GrowthTail();
     }
@@ -65,7 +67,6 @@ public class Worm: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         DrawRayCast();
     }
 
@@ -99,7 +100,6 @@ public class Worm: MonoBehaviour
                 {
                     isHeadOnGround = false;
                 }
-
             }
             else
             {
@@ -218,13 +218,6 @@ public class Worm: MonoBehaviour
             GrowthBody();
             GrowthBody();
             AudioManager.instance.PlaySFX(AudioManager.instance.eat);
-        }
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent(out Spike hot))
-        {
-            AudioManager.instance.PlaySFX(AudioManager.instance.death);
         }
     }
 }

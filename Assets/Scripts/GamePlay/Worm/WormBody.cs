@@ -32,14 +32,18 @@ public class WormBody : MonoBehaviour
     void Update()
     {
         DrawRayCastEveryPartOfBody();
+        if (!WormMovement.Instance.isMoving)
+        {
+            CheckBody();
+        }
     }
     //Draw Ray at every parts of body
 
     void DrawRayCastEveryPartOfBody()
     {
-        float distanceRulers = 0.09f;
+        float distanceRulers = 0.1f;
         ManyBoxes = gameObject.GetComponent<BoxCollider2D>();
-        RaycastHit2D hitdowns = Physics2D.Raycast(ManyBoxes.bounds.center, Vector2.down, ManyBoxes.bounds.extents.y + distanceRulers, layer);
+        RaycastHit2D hitdowns = Physics2D.Raycast(DownRay.transform.position, Vector2.down, distanceRulers, layer);
         if (hitdowns.collider != null)
         {
             if (hitdowns.collider.CompareTag("Wall") || hitdowns.collider.CompareTag("Apple") || hitdowns.collider.CompareTag("Rock"))
@@ -67,7 +71,6 @@ public class WormBody : MonoBehaviour
             }
             else
             {
-                
                 ObjectSpotDown = false;
             }
         }
@@ -122,6 +125,17 @@ public class WormBody : MonoBehaviour
             ObjectSpotUp = false;
         }
         ChangeSprite();
+    }
+    void CheckBody()
+    {
+        if (Worm.Instance.bodylist.Count < 1)
+        {
+            Worm.Instance.isBodyOnGround = IsBodyOnGround;
+        }
+        else
+        {
+            Worm.Instance.isBodyOnGround = Worm.Instance.bodylist.Any(c => c.GetComponent<WormBody>().IsBodyOnGround == true);
+        }
     }
     void ChangeSprite()
     {

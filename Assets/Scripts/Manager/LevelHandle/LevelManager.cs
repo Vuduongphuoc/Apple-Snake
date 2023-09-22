@@ -38,7 +38,7 @@ public class LevelManager : MonoBehaviour
     }
     private void Start()
     {
-        GameManager.Instance.LoadData();
+        //GameManager.Instance.LoadData();
         LoadButtonWhenStart();
         
     }
@@ -56,16 +56,16 @@ public class LevelManager : MonoBehaviour
             btnlvl.GetComponent<Button>().onClick.AddListener(delegate { GameManager.Instance.LoadLevel(lvl.levelIndex); });
             btnlvl.GetComponent<Button>().onClick.AddListener(delegate { setIndexCurrentLevel(lvl.levelIndex); });
 
-            if (GameManager.Instance.CheckLevelIsUnlock(lvl))
-            {
-                btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().unLockImg;
-                btnlvl.GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().lockImg;
-                btnlvl.GetComponent<Button>().interactable = false;
-            }
+            //if (GameManager.Instance.CheckLevelIsUnlock(lvl))
+            //{
+            //    btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().unLockImg;
+            //    btnlvl.GetComponent<Button>().interactable = true;
+            //}
+            //else
+            //{
+            //    btnlvl.GetComponent<Image>().sprite = btnlvl.GetComponent<ButtonLevel>().lockImg;
+            //    btnlvl.GetComponent<Button>().interactable = false;
+            //}
         }
     }
     public void LoadButtonWhilePlay()

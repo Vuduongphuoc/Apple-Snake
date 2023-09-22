@@ -15,7 +15,6 @@ public class WormMovement : MonoBehaviour
     [Header("-------------BUTTON DIRECTION CHECK-----------------")]
     public bool isMoving;
     public Vector2 WinDirection;
-
     bool isCoolDown;
     Vector2 startPos;
     Vector2 endPos;
@@ -34,11 +33,10 @@ public class WormMovement : MonoBehaviour
         speed = 5f;
         isCoolDown = false;
     }
-    private void FixedUpdate()
+    private void Update()
     {
         if (!isMoving)
         {
-            CheckBody();
             CheckOnGround();
         }
     }
@@ -69,19 +67,16 @@ public class WormMovement : MonoBehaviour
         foreach (var body in Worm.Instance.BodyParts)
         {
             Vector2 point = Worm.Instance.PositionHistory[Mathf.Min(index * Worm.Instance.distance, Worm.Instance.PositionHistory.Count - 1)];
-            body.transform.position = Vector2.Lerp(body.transform.position, point, 30f * Time.deltaTime);
+            body.transform.position = Vector2.Lerp(body.transform.position, point, 1f);
             index++;
         }
-    }
-    void CheckBody()
-    {
-        Worm.Instance.isBodyOnGround = Worm.Instance.bodylist.Any(c=> c.GetComponent<WormBody>().IsBodyOnGround == true);
     }
     void DropDown()
     {
         foreach (var part in Worm.Instance.DropDownParts)
         {
             part.transform.position = new Vector2(part.transform.position.x, part.transform.position.y - WormTail.Instance.distanceFromTailToWall * speed * Time.deltaTime);
+            
         }
     }
     void DropDownAndPositionAfterDrop()

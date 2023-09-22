@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 3500811947772330668}
   - component: {fileID: 4561509477099408377}
   - component: {fileID: 2724339740100379672}
-  - component: {fileID: -7680578868970723667}
+  - component: {fileID: 3737501141208208410}
   m_Layer: 7
   m_Name: Body
   m_TagString: Body
@@ -231,11 +231,7 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 64
-  tailSprite:
-  - {fileID: 21300000, guid: 82e4ab7d23c91a241aa81da5ae1d6970, type: 3}
-  - {fileID: 21300000, guid: 58fc9688bf3a70c4f86e1cb0cbd7c691, type: 3}
-  - {fileID: 21300000, guid: e90c24b2b88d41244bdf1255bb3e4450, type: 3}
-  - {fileID: 21300000, guid: f173b518e52b13f4a8d02fc49ac9e20a, type: 3}
+  list: []
   bodySprite:
   - {fileID: 21300000, guid: 0797a683d6ff131479bcaa531c6ce323, type: 3}
   - {fileID: 21300000, guid: 89b9dfdc50485414b85e60e65cdfbcce, type: 3}
@@ -249,10 +245,8 @@ MonoBehaviour:
   UpRay: {fileID: 867134839}
   LeftRay: {fileID: 966442541}
   RightRay: {fileID: 2057432878}
-  ObjectSpotLeft: 0
-  ObjectSpotRight: 0
-  ObjectSpotUp: 0
-  ObjectSpotDown: 0
+  a: 0
+  IsBodyOnGround: 0
 --- !u!61 &4561509477099408377
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -270,14 +264,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0256411, y: 0.94871795}
+    oldSize: {x: 1.051282, y: 0.94871795}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.95}
   m_EdgeRadius: 0
 --- !u!114 &2724339740100379672
 MonoBehaviour:
@@ -291,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b746ee0a0b920c45a3cb317aec0eba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &-7680578868970723667
+--- !u!50 &3737501141208208410
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -310,5 +304,5 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
